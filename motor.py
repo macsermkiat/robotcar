@@ -6,7 +6,8 @@ import random
 import tkinter as tk
 from distance import the_distance
 import subprocess
-#from classify_image import export
+#import classify as cs
+import classify_tf as cs
 
 GPIO.setmode(GPIO.BCM)			# GPIO numbering
 GPIO.setwarnings(False)			# enable warning from GPIO
@@ -111,7 +112,9 @@ def key_input(event):
     sys.exit(0)
   elif key_press == 'space':
     print('Analyze!')
-    subprocess.check_call(['/home/pi/robot','classify_image.py','--image OnbOurShips_NS_LPTile.jpg  --model inception'])
+    #cs.classify()
+    image_path = '/dev/shm/mjpeg/cam.jpg'
+    cs.run_inference_on_image(image_path)
   else:
     print('Wrong key kress')
 

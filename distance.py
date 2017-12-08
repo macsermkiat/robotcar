@@ -59,15 +59,17 @@ def the_distance():
         #print ("Distance %s:  %.1f cm" %(echo, distance))
         if echo == 6 :
           distanceR = distance
-          print("Distance Right: %s cm" % distanceR)
+          #print("Distance Right: %s cm" % distanceR)
+          return distanceR
         elif echo == 27 :
           distanceM = distance
-          print("Distance Front: %s cm" % distanceM)
+          #print("Distance Front: %s cm" % distanceM)
+          return distanceM
         elif echo == 17 :
           distanceL = distance
-          print("Distance Left: %s cm" % distanceL)
+          #print("Distance Left: %s cm" % distanceL)
+          return distanceL
 
-        #return distanceR, distanceM, distanceL
         time.sleep(1)
       
       #Define functions for position of sensor
@@ -94,4 +96,4 @@ def the_distance():
   finally:
     GPIO.cleanup()
 
-the_distance()
+#the_distance()
