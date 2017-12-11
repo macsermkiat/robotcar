@@ -4,10 +4,10 @@ import sys
 import signal
 import random
 import tkinter as tk
-from distance import the_distance
+#from distance import the_distance
 import subprocess
-#import classify as cs
-import classify_tf as cs
+import classify as cs
+#import classify_tf as cs
 
 GPIO.setmode(GPIO.BCM)			# GPIO numbering
 GPIO.setwarnings(False)			# enable warning from GPIO
@@ -77,19 +77,19 @@ def sigint_handler(signum, frame):
   sys.exit(0)
   signal.signal(signal.SIGINT, sigint_handler)
 
-def check_front():
-  dist = the_distance()
-  if dist < 15:
-    print("Too close,", dist)
-    backward()
-    dist = the_distance()
-    if dist < 15:
-      print("Too close,", dist)
-      left()
-      dist = the_distance()
-      if dist < 15:
-        print("Too close, giving up", dist)
-        sys.exit()
+#def check_front():
+#  dist = the_distance()
+#  if dist < 15:
+#    print("Too close,", dist)
+#    backward()
+#    dist = the_distance()
+#    if dist < 15:
+#      print("Too close,", dist)
+#      left()
+#      dist = the_distance()
+#      if dist < 15:
+#        print("Too close, giving up", dist)
+#        sys.exit()
 
 def key_input(event):
   key_press = event.keysym.lower()
@@ -112,9 +112,9 @@ def key_input(event):
     sys.exit(0)
   elif key_press == 'space':
     print('Analyze!')
-    #cs.classify()
-    image_path = '/dev/shm/mjpeg/cam.jpg'
-    cs.run_inference_on_image(image_path)
+    cs.classify()
+    #image_path = '/dev/shm/mjpeg/cam.jpg'
+    #cs.run_inference_on_image(image_path)
   else:
     print('Wrong key kress')
 
