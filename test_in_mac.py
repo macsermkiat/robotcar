@@ -1,2 +1,4 @@
 import classify_tf
-classify_tf.main()
+for i in range(10):
+  classify_tf.main()
+  print(i)
