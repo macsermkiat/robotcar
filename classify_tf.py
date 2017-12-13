@@ -40,6 +40,21 @@ import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
+#Decorator Time Function
+import time
+from functools import wraps
+ 
+ 
+def fn_timer(function):
+    @wraps(function)
+    def function_timer(*args, **kwargs):
+        t0 = time.time()
+        result = function(*args, **kwargs)
+        t1 = time.time()
+        print ("Total time running : %s seconds" % (str(t1-t0)))
+        return result
+    return function_timer
+    
 #FLAGS = None
 
 # pylint: disable=line-too-long
@@ -109,16 +124,16 @@ class NodeLookup(object):
       return ''
     return self.node_lookup[node_id]
 
-
-#def create_graph():
-#  """Creates a graph from saved GraphDef file and returns a saver."""
-#  # Creates graph from saved graph_def.pb.
-#  with tf.gfile.FastGFile(os.path.join(
-#      model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
-#    graph_def = tf.GraphDef()
-#    graph_def.ParseFromString(f.read())
-#    _ = tf.import_graph_def(graph_def, name='')
-
+'''
+def create_graph():
+  #"""Creates a graph from saved GraphDef file and returns a saver."""
+  # Creates graph from saved graph_def.pb.
+  with tf.gfile.FastGFile(os.path.join(
+         model_dir, 'classify_image_graph_def.pb'), 'rb') as f:
+      graph_def = tf.GraphDef()
+      graph_def.ParseFromString(f.read())
+      _ = tf.import_graph_def(graph_def, name='')
+'''
 def create_and_persist_graph():
     with tf.Session() as persisted_sess:
         # Load Graph
@@ -127,11 +142,35 @@ def create_and_persist_graph():
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
             persisted_sess.graph.as_default()
-            tf.import_graph_def(graph_def, name='')
-            
+            tf.import_graph_def(graph_def, name='')            
         return persisted_sess.graph
 create_and_persist_graph()
+#saver = tf.train.Saver()
 
+@fn_timer
+def Warm_up_session(image):
+  if not tf.gfile.Exists(image):
+    tf.logging.fatal('File does not exist %s', image)
+  image_data = tf.gfile.FastGFile(image, 'rb').read()
+  # Add an op to initialize the variables.
+  init_op = tf.global_variables_initializer()
+  with tf.Session() as sess:
+    sess.run(init_op)
+    softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
+    #Warmup Session
+    for i in range(3):
+      sess.run(softmax_tensor,
+                             {'DecodeJpeg/contents:0': image_data}) 
+      print(sess)
+      print(i)
+      #save_path = saver.save(sess, './model/savesess.ckpt')
+    #print('Save warmup session in %s' % save_path)
+    #End Warmup
+
+
+Warm_up_session('ship.jpg') 
+   
+@fn_timer
 def run_inference_on_image(image):
   """Runs inference on an image.
   Args:
@@ -157,6 +196,7 @@ def run_inference_on_image(image):
     #   encoding of the image.
     # Runs the softmax tensor by feeding the image_data as input to the graph.
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
+    #saver.restore(sess, './model/savesess.ckpt')
     predictions = sess.run(softmax_tensor,
                            {'DecodeJpeg/contents:0': image_data})
     predictions = np.squeeze(predictions)
