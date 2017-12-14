@@ -4,7 +4,7 @@ import sys
 import signal
 import random
 import tkinter as tk
-#from distance import the_distance
+import distance as dt
 import subprocess
 #import classify as cs
 import classify_tf as cs
@@ -94,6 +94,7 @@ def sigint_handler(signum, frame):
 def key_input(event):
   key_press = event.keysym.lower()
   sleep_time = 0.10
+  dt.the_distance()
   print(key_press)
 
   if key_press == 'w':

@@ -30,8 +30,8 @@ GPIO.setup(MpinEcho, GPIO.IN)
 GPIO.setup(RpinEcho, GPIO.IN)
 
 def the_distance():
-  try:
-    while True:
+  #try:
+   # while True:
       def trigger_function(trigger):
         # set Trigger to HIGH
         GPIO.output(trigger, 1)
@@ -59,15 +59,15 @@ def the_distance():
         #print ("Distance %s:  %.1f cm" %(echo, distance))
         if echo == 6 :
           distanceR = distance
-          #print("Distance Right: %s cm" % distanceR)
+          print("Distance Right: %s cm" % distanceR)
           return distanceR
         elif echo == 27 :
           distanceM = distance
-          #print("Distance Front: %s cm" % distanceM)
+          print("Distance Front: %s cm" % distanceM)
           return distanceM
         elif echo == 17 :
           distanceL = distance
-          #print("Distance Left: %s cm" % distanceL)
+          print("Distance Left: %s cm" % distanceL)
           return distanceL
 
         time.sleep(1)
@@ -91,9 +91,9 @@ def the_distance():
       #dleft = left_sensor()
       #dleft()
       #'''
-  except KeyboardInterrupt:
-    print ("\n")
-  finally:
-    GPIO.cleanup()
+  #except KeyboardInterrupt:
+  #  print ("\n")
+  #finally:
+  #  GPIO.cleanup()
 
 #the_distance()
