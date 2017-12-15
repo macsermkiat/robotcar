@@ -12,10 +12,28 @@ import numpy as np
 #import cv2
 import h5py
 
+#Declare Time Decorator
+import time
+from functools import wraps
+
+model = ResNet50(weights="imagenet")
+
+def fn_timer(function):
+    @wraps(function)
+    def function_timer(*args, **kwargs):
+        t0 = time.time()
+        result = function(*args, **kwargs)
+        t1 = time.time()
+        print ("Total time running : %s seconds" % (str(t1-t0)))
+        return result
+    return function_timer
+
+
+@fn_timer
 def classify(): 
   inputShape = (224, 224)
   preprocess = imagenet_utils.preprocess_input
-  model = ResNet50(weights="imagenet")
+  #model = ResNet50(weights="imagenet")
   image_path = 'ship.jpg'
   image = load_img('ship.jpg', target_size=(224,224))
   image = img_to_array(image)
@@ -31,5 +49,4 @@ def classify():
   for (i, (imagenetID, label, prob)) in enumerate(P[0]):
         output = ("{}. {}: {:.2f}%".format(i + 1, label, prob * 100))
         print(output)
-
 

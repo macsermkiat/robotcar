@@ -153,18 +153,16 @@ def Warm_up_session(image):
     tf.logging.fatal('File does not exist %s', image)
   image_data = tf.gfile.FastGFile(image, 'rb').read()
   # Add an op to initialize the variables.
-  init_op = tf.global_variables_initializer()
+  #init_op = tf.global_variables_initializer()
   with tf.Session() as sess:
-    sess.run(init_op)
+    #sess.run(init_op)
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
     #Warmup Session
-    for i in range(3):
+    for i in range(10):
       sess.run(softmax_tensor,
                              {'DecodeJpeg/contents:0': image_data}) 
       print(sess)
       print(i)
-      #save_path = saver.save(sess, './model/savesess.ckpt')
-    #print('Save warmup session in %s' % save_path)
     #End Warmup
 
 
@@ -196,7 +194,6 @@ def run_inference_on_image(image):
     #   encoding of the image.
     # Runs the softmax tensor by feeding the image_data as input to the graph.
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
-    #saver.restore(sess, './model/savesess.ckpt')
     predictions = sess.run(softmax_tensor,
                            {'DecodeJpeg/contents:0': image_data})
     predictions = np.squeeze(predictions)
@@ -228,11 +225,11 @@ def maybe_download_and_extract():
     print('Successfully downloaded', filename, statinfo.st_size, 'bytes.')
   tarfile.open(filepath, 'r:gz').extractall(dest_directory)
 
+maybe_download_and_extract()
 
 def main():
-  maybe_download_and_extract()
-  image = '/dev/shm/mjpeg/cam.jpg'
-  #image = 'ship.jpg'
+  #image = '/dev/shm/mjpeg/cam.jpg'
+  image = 'ship.jpg'
   run_inference_on_image(image)
 
 """
