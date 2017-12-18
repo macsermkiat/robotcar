@@ -11,6 +11,7 @@ from keras.preprocessing.image import load_img
 import numpy as np
 #import cv2
 import h5py
+import subprocess
 
 #Declare Time Decorator
 import time
@@ -41,8 +42,12 @@ def classify():
   image = preprocess(image)
 
   # classify the image
+  
+  print("I'm thinking...")
+  subprocess.call(['aplay','think.wav'])
   preds = model.predict(image)
   P = imagenet_utils.decode_predictions(preds)
+
   # loop over the predictions and display the rank-5 predictions +
   # probabilities to our terminal
 
@@ -50,3 +55,7 @@ def classify():
         output = ("{}. {}: {:.2f}%".format(i + 1, label, prob * 100))
         print(output)
 
+  winner = P[0][0][1]
+  speak = ("I think I see {}".format(winner))
+  subprocess.call(['pico2wave','-w','win.wav',speak])
+  subprocess.call(['aplay','win.wav'])
