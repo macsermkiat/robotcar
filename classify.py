@@ -35,8 +35,8 @@ def classify():
   inputShape = (224, 224)
   preprocess = imagenet_utils.preprocess_input
   #model = ResNet50(weights="imagenet")
-  image_path = 'ship.jpg'
-  image = load_img('ship.jpg', target_size=(224,224))
+  image_path = '/dev/shm/mjpeg/cam.jpg'
+  image = load_img(image_path, target_size=inputShape)
   image = img_to_array(image)
   image = np.expand_dims(image, axis=0)
   image = preprocess(image)

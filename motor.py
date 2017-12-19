@@ -25,8 +25,8 @@ p2 = GPIO.PWM(DIG2, 100)		# set pwm for M2
 
 ################ Movement Definitions BEGIN #######################
 
-def forward(tf):
-  print ("Forward")			# display "Forward" when programe run
+def backward(tf):
+  print ("Banckward")			# display "Forward" when programe run
   GPIO.output(AN1, GPIO.HIGH)		# set AN1 as HIGH, M1B will turn ON
   GPIO.output(AN2, GPIO.HIGH)		# set AN2 as HIGH, M2B will turn ON
   p1.start(0)				# set Direction for M1
@@ -35,11 +35,11 @@ def forward(tf):
   GPIO.output(AN1, GPIO.LOW)           # set AN1 as HIGH, M1B will turn ON
   GPIO.output(AN2, GPIO.LOW)
 
-def left(tf):
-  print ("Left")
+def forward(tf):
+  print ("Forward")
   GPIO.output(AN1, GPIO.HIGH)
   GPIO.output(AN2, GPIO.HIGH)
-  p1.start(100)
+  p1.start(72)
   p2.start(100)
   sleep(tf)
   GPIO.output(AN1, GPIO.LOW)
@@ -55,8 +55,8 @@ def right(tf):
   GPIO.output(AN1, GPIO.LOW)           
   GPIO.output(AN2, GPIO.LOW)
 
-def backward(tf):
-  print ("Backward")
+def left(tf):
+  print ("Left")
   GPIO.output(AN1, GPIO.HIGH)
   GPIO.output(AN2, GPIO.HIGH)
   p1.start(100)
@@ -77,34 +77,38 @@ def sigint_handler(signum, frame):
   sys.exit(0)
   signal.signal(signal.SIGINT, sigint_handler)
 
-#def check_front():
-#  dist = the_distance()
-#  if dist < 15:
-#    print("Too close,", dist)
-#    backward()
-#    dist = the_distance()
-#    if dist < 15:
-#      print("Too close,", dist)
-#      left()
-#      dist = the_distance()
-#      if dist < 15:
-#        print("Too close, giving up", dist)
-#        sys.exit()
+def check_front():
+  dist = dt.distance()
+  if dist < 15:
+    print("Too close,", dist)
+    backward()
+    dist = dt.distance()
+    if dist < 15:
+      print("Too close,", dist)
+      left()
+      dist = dt.distance()
+      if dist.distanceM < 15:
+        print("Too close, giving up", dist)
+        sys.exit()
 
 def key_input(event):
   key_press = event.keysym.lower()
-  sleep_time = 0.10
+  sleep_time = 0.20
   dt.the_distance()
   print(key_press)
-
+  
   if key_press == 'w':
     forward(sleep_time)
+    check_front()
   elif key_press == 's':
     backward(sleep_time)
+    check_front()
   elif key_press == 'a':
     left(sleep_time)
+    check_front()
   elif key_press == 'd':
     right(sleep_time)
+    check_front()
   elif key_press == 'q':
     stop()
   elif key_press == 'z':
