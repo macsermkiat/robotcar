@@ -38,10 +38,10 @@ def the_distance():
         # set Trigger after 0.01ms to LOW
         time.sleep(0.00001)
         GPIO.output(trigger, 0)
-        startTime = time.time()
-        stopTime = time.time()
-        return startTime
-        return stopTime
+        #startTime = time.time()
+        #stopTime = time.time()
+        #return startTime
+        #return stopTime
 
       def echo_function(echo):
         # save start time
@@ -60,16 +60,14 @@ def the_distance():
         if echo == 6 :
           distanceR = distance
           print("Distance Right: %s cm" % distanceR)
-          return distanceR
         elif echo == 27 :
           distanceM = distance
           print("Distance Front: %s cm" % distanceM)
-          return distanceM
         elif echo == 17 :
           distanceL = distance
           print("Distance Left: %s cm" % distanceL)
-          return distanceL
-
+        all_distance = [distanceL, distanceM, distanceR]
+        return all_distance
         time.sleep(1)
       
       #Define functions for position of sensor
