@@ -78,7 +78,9 @@ def sigint_handler(signum, frame):
   signal.signal(signal.SIGINT, sigint_handler)
 
 def check_front():
-  dist = dt.distance()
+  dista = dt.the_distance()
+  dist = dista.all_distance[1]
+  print(dist)
   if dist < 15:
     print("Too close,", dist)
     backward()
