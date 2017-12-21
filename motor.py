@@ -77,40 +77,47 @@ def sigint_handler(signum, frame):
   sys.exit(0)
   signal.signal(signal.SIGINT, sigint_handler)
 
-def check_front():
+def check_distance():
   dista = dt.the_distance()
-  dist = dista.all_distance[1]
-  print(dist)
+  distR = dista[0]
+  dist  = dista[1]
+  distL = dista[2]
+  print('Front object distance: {}'.format(dist))
   if dist < 15:
     print("Too close,", dist)
-    backward()
-    dist = dt.distance()
+    backward(1)
+    dista = dt.the_distance()
+    dist = dista[1]
     if dist < 15:
       print("Too close,", dist)
-      left()
-      dist = dt.distance()
-      if dist.distanceM < 15:
+      left(1)
+      dista = dt.the_distance()
+      dist = dista[1]
+      if dist < 15:
         print("Too close, giving up", dist)
-        sys.exit()
+        stop()
+  elif distR < 15 :
+    print("Beware RIGHT!")
+    left(1)
+  elif distL < 15 :
+    print("Beware LEFT!")
+    right(1)
+
 
 def key_input(event):
   key_press = event.keysym.lower()
   sleep_time = 0.20
-  dt.the_distance()
+  check_distance()
   print(key_press)
   
   if key_press == 'w':
     forward(sleep_time)
-    check_front()
   elif key_press == 's':
     backward(sleep_time)
-    check_front()
   elif key_press == 'a':
     left(sleep_time)
-    check_front()
   elif key_press == 'd':
     right(sleep_time)
-    check_front()
   elif key_press == 'q':
     stop()
   elif key_press == 'z':

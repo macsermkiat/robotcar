@@ -63,10 +63,10 @@ def the_distance():
           elif i == 2 :
             #print("Distance Left: %s cm" % distance)
             all_distance[2] = distance
-        print(all_distance)
         return all_distance 
 
-      trigger_function(pinTrigger,pinEcho)
+      export_distance = trigger_function(pinTrigger,pinEcho)
+      return export_distance
   #except KeyboardInterrupt:
   #  print ("\n")
   #finally:
