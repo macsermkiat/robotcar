@@ -7,7 +7,6 @@ import tkinter as tk
 import distance as dt
 import subprocess
 import classify as cs
-#import classify_tf as cs
 
 GPIO.setmode(GPIO.BCM)			# GPIO numbering
 GPIO.setwarnings(False)			# enable warning from GPIO
@@ -20,16 +19,18 @@ GPIO.setup(AN1, GPIO.OUT)		# set pin as output
 GPIO.setup(DIG2, GPIO.OUT)		# set pin as output
 GPIO.setup(DIG1, GPIO.OUT)		# set pin as output
 sleep(1)				# delay for 1 seconds
-p1 = GPIO.PWM(DIG1, 100)		# set pwm for M1
-p2 = GPIO.PWM(DIG2, 100)		# set pwm for M2
+p1 = GPIO.PWM(DIG1, 100)		
+p2 = GPIO.PWM(DIG2, 100)               
 
 ################ Movement Definitions BEGIN #######################
 
 def backward(tf):
-  print ("Banckward")			# display "Forward" when programe run
+  print ("Bancward")			# display "Forward" when programe run
   GPIO.output(AN1, GPIO.HIGH)		# set AN1 as HIGH, M1B will turn ON
   GPIO.output(AN2, GPIO.HIGH)		# set AN2 as HIGH, M2B will turn ON
-  p1.start(0)				# set Direction for M1
+  GPIO.output(DIG1, GPIO.LOW)
+  GPIO.output(DIG2, GPIO.LOW)
+  p1.start(30)				# set Direction for M1
   p2.start(0)				# set Direction for M2
   sleep(tf)
   GPIO.output(AN1, GPIO.LOW)           # set AN1 as HIGH, M1B will turn ON
@@ -39,6 +40,8 @@ def forward(tf):
   print ("Forward")
   GPIO.output(AN1, GPIO.HIGH)
   GPIO.output(AN2, GPIO.HIGH)
+  GPIO.output(DIG1, GPIO.HIGH)
+  GPIO.output(DIG2, GPIO.HIGH)
   p1.start(72)
   p2.start(100)
   sleep(tf)
@@ -50,7 +53,7 @@ def right(tf):
   GPIO.output(AN1, GPIO.HIGH)
   GPIO.output(AN2, GPIO.HIGH)
   p1.start(0)
-  p2.start(100)
+  p2.start(40)
   sleep(tf)
   GPIO.output(AN1, GPIO.LOW)           
   GPIO.output(AN2, GPIO.LOW)
@@ -59,7 +62,7 @@ def left(tf):
   print ("Left")
   GPIO.output(AN1, GPIO.HIGH)
   GPIO.output(AN2, GPIO.HIGH)
-  p1.start(100)
+  p1.start(60)
   p2.start(0)
   sleep(tf)
   GPIO.output(AN1, GPIO.LOW)           
@@ -90,7 +93,7 @@ def check_distance():
     dist = dista[1]
     if dist < 15:
       print("Too close,", dist)
-      left(1)
+      left(0.5)
       dista = dt.the_distance()
       dist = dista[1]
       if dist < 15:
@@ -98,10 +101,12 @@ def check_distance():
         stop()
   elif distR < 15 :
     print("Beware RIGHT!")
-    left(1)
+    left(0.5)
+    forward(0.5)
   elif distL < 15 :
     print("Beware LEFT!")
-    right(1)
+    right(0.5)
+    forward(0.5)
 
 
 def key_input(event):
@@ -127,9 +132,8 @@ def key_input(event):
   elif key_press == 'space':
     print('Analyze!')
     cs.classify()
-    #cs.main()
   else:
-    print('Wrong key kress')
+    print('Wrong key press')
 
 def autonomy(): 
   tf = 0.030
