@@ -1,5 +1,6 @@
 # import the necessary packages
 from keras.applications import ResNet50
+import tensorflow as tf
 #from keras.applications import InceptionV3
 #from keras.applications import Xception # TensorFlow ONLY
 #from keras.applications import VGG16
@@ -57,5 +58,6 @@ def classify():
 
   winner = P[0][0][1]
   speak = ("I think I see {}".format(winner))
-  subprocess.call(['pico2wave','-w','win.wav',speak])
-  subprocess.call(['aplay','win.wav'])
+  subprocess.call(['pico2wave','-w','/tmp/win.wav',speak])
+  subprocess.call(['omxplayer','/tmp/win.wav'])
+  subprocess.call(['rm','/tmp/win.wav'])

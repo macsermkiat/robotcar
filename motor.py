@@ -25,7 +25,7 @@ p2 = GPIO.PWM(DIG2, 100)
 ################ Movement Definitions BEGIN #######################
 
 def backward(tf):
-  print ("Bancward")			# display "Forward" when programe run
+  print ("Backward")			# display "Forward" when programe run
   GPIO.output(AN1, GPIO.HIGH)		# set AN1 as HIGH, M1B will turn ON
   GPIO.output(AN2, GPIO.HIGH)		# set AN2 as HIGH, M2B will turn ON
   GPIO.output(DIG1, GPIO.LOW)
